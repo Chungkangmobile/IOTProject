@@ -1,3 +1,6 @@
+/*본 스케치는 https://infoinno.tistory.com/70 블로그와 쳇 gpt 를 참조하여 필요 코드를 발췌하여 작성하였습니다.
+수정일 2024.05.16
+작성자 신정헌*/
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 #include <DHT.h>
