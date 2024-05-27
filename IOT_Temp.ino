@@ -1,15 +1,15 @@
 /*본 스케치는 https://infoinno.tistory.com/70 블로그와 쳇 gpt 를 참조하여 필요 코드를 발췌하여 작성하였습니다.
 수정일 2024.05.16
 작성자 신정헌*/
-#include <Wire.h>
+#include <Wire.h>// I2C 통신
 #include <LiquidCrystal_I2C.h>
-#include <DHT.h>
+#include <DHT.h>//온습도
 
-#define pinDHT 9
-#define DHTTYPE DHT11
+#define pinDHT 9//온습도 센서 핀
+#define DHTTYPE DHT11//온습도센서 부품타입
 
 DHT dht(pinDHT, DHTTYPE);
-LiquidCrystal_I2C lcd(0x27, 16, 2);
+LiquidCrystal_I2C lcd(0x27, 16, 2);//lcd 부품
 int count = 0;
 int numStars = 0;
 bool increasing = true; // 별이 나타나는 상태를 나타내는 플래그
