@@ -7,18 +7,19 @@
 
 #define pinDHT 9//온습도 센서 핀
 #define DHTTYPE DHT11//온습도센서 부품타입
+#define DCFAN  6
+#define DCFAN_2 5
 
 DHT dht(pinDHT, DHTTYPE);
 LiquidCrystal_I2C lcd(0x27, 16, 2);//lcd 부품
-int count = 0;
 int numStars = 0;
 bool increasing = true; // 별이 나타나는 상태를 나타내는 플래그
-float celsiusToFahrenheit(float celsius) {
-  return floor (celsius * 9.0 / 5.0 + 32.0);
-}
+
 
 void setup() {
-  Serial.begin(9600);
+  pinMode(DCFAN,OUTPUT);
+  //처음 동작 시 나오는 메시지
+  Serial.begin(9600);//아두이노 보드타입 시리얼
   dht.begin();
   lcd.init();
   lcd.backlight();
@@ -31,29 +32,40 @@ void setup() {
 }
 
 void loop() {
-  //DHT
-  
+  //DHT결과값 불러오기
   int h = dht.readHumidity();
   int t = dht.readTemperature();
-   // 섭씨를 화씨로 변환
-  float t_fahrenheit = celsiusToFahrenheit(t);
-
+  
+//시리얼모닝터
+  
+  Serial.print("Temperature: ");
+  Serial.print(t);
+  Serial.print(" C    ");
+  Serial.println("");
   Serial.print("Humidity: ");
   Serial.print(h);
   Serial.print(" %\t");
-  Serial.print("Temperature: ");
-  Serial.print(t_fahrenheit);
-  Serial.print(" C    ");
-  Serial.print(count);
+  Serial.println("");
+  Serial.print("WORKING.......");
+  Serial.println("");
+
+  int fanSpeed = map(t, 18, 24, 0, 255); // 온도 20도에서 30도 사이를 팬 속도 0~255로 매핑
+  fanSpeed = constrain(fanSpeed, 0, 255); // 팬 속도 제한
+  analogWrite(DCFAN, fanSpeed); // 팬 속도 설정
+
+  int fanSpeed2 = map(h, 24, 70, 0, 255); // 습도 24%에서 70% 사이를 팬 속도 0~255로 매핑
+  fanSpeed2 = constrain(fanSpeed, 0, 255); // 팬 속도 제한
+  analogWrite(DCFAN_2, fanSpeed); // 팬 속도 설정
+
 
   lcd.setCursor(0, 0);
   lcd.print("T ");
-  lcd.print((int)t_fahrenheit);
-  lcd.print(" f");
+  lcd.print(t);
+  lcd.print("C");
   lcd.setCursor(0, 1);
   lcd.print("H ");
   lcd.print(h);
-  lcd.print(" %");
+  lcd.print("%");
   lcd.setCursor(9,0);
   lcd.print("Working");
   lcd.setCursor(11, 1);
@@ -74,6 +86,7 @@ void loop() {
     if (numStars == 0) {
       increasing = true;
     }
+    
   }
 
   delay(1000);
