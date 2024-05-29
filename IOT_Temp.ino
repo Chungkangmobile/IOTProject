@@ -18,6 +18,7 @@ bool increasing = true; // 별이 나타나는 상태를 나타내는 플래그
 
 void setup() {
   pinMode(DCFAN,OUTPUT);
+  pinMode(DCFAN_2,OUTPUT);
   //처음 동작 시 나오는 메시지
   Serial.begin(9600);//아두이노 보드타입 시리얼
   dht.begin();
